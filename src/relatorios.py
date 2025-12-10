@@ -1,7 +1,7 @@
 def exibir(consumo, otimizado, pico, anomalia):
     print("================ d-_-b ================")
     print(f"\nConsumo atual: {consumo} W")
-    print(f"Consumo otimizado: {otimizado:.2f} W\n")
+    print(f"Consumo otimizado: {otimizado:.2f} W")
     if pico:
         print("⚠️ Pico de demanda detectado!\n")
     if anomalia:

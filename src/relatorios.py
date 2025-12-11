@@ -8,10 +8,10 @@ def exibir(consumo, otimizado, pico, anomalia):
     ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝
               Sistema de Monitoramento Energético
     """)
-    print(f"\nConsumo atual: {consumo} W")
-    print(f"Consumo otimizado: {otimizado:.2f} W")
+    print(f"\nConsumo atual: {round(consumo, 2)} W")
+    print(f"Consumo otimizado: {round(otimizado, 2)} W")
     if pico:
-        print("⚠️ Pico de demanda detectado!\n")
+        print("\n⚠️ =Pico de demanda detectado= ⚠️\n")
     if anomalia:
-        print("🔧 Anomalia detectada! Manutenção preventiva recomendada.\n")
+        print("\n🔧 =Anomalia detectada! Manutenção preventiva recomendada= 🔧\n")
     print("==============================================================================")

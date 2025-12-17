@@ -6,10 +6,10 @@ from sensores import cadastrar_sensor, ler_consumos
 import time
 import os
 historico = []
-cadastrar_sensor("Geladeira", 300)
-cadastrar_sensor("Ar Condicionado", 1500)
-cadastrar_sensor("Computador", 500)
-cadastrar_sensor("Iluminação", 200)
+cadastrar_sensor("Cozinha", 500)
+cadastrar_sensor("Quarto", 1500)
+cadastrar_sensor("Sala", 600)
+cadastrar_sensor("Banheiro", 1700)
 while True:
     os.system("cls" if os.name == "nt" else "clear")
     leituras = ler_consumos()

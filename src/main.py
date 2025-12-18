@@ -1,30 +1,56 @@
-from previsao import detectar_pico
-from otimizador import otimizar
-from anomalias import detectar_anomalia
+from sensores import cadastrar_comodo, ler_consumos, obter_historico_comodos
 from relatorios import exibir
-from sensores import cadastrar_sensor, ler_consumos
-import time
+from ia.enervision_ai import EnerVisionAI
 import os
-historico = []
-cadastrar_sensor("Cozinha", 500)
-cadastrar_sensor("Quarto", 1500)
-cadastrar_sensor("Sala", 600)
-cadastrar_sensor("Banheiro", 1700)
+import time
+
+# Inicializa a IA com janela de análise de 10 leituras
+ia = EnerVisionAI(janela=10)
+
+# Cadastro dos cômodos da casa (sensores virtuais)
+cadastrar_comodo("Sala", 1200)
+cadastrar_comodo("Cozinha", 2000)
+cadastrar_comodo("Quarto", 800)
+cadastrar_comodo("Banheiro", 600)
+
+# Loop principal de monitoramento
 while True:
+    # Limpa o terminal para atualização em tempo real
     os.system("cls" if os.name == "nt" else "clear")
+
+    # Lê os consumos atuais dos cômodos
     leituras = ler_consumos()
-    consumo_total = sum(sensor["consumo"] for sensor in leituras)
-    historico.append(consumo_total)
-    pico = detectar_pico(consumo_total)
-    consumo_otimizado = otimizar(consumo_total)
-    anomalia = detectar_anomalia(historico)
-    exibir(consumo_total, consumo_otimizado, pico, anomalia)
-    print("\n🔌 Sensores:")
-    for sensor in leituras:
-        print(f"• {sensor['nome']}: {sensor['consumo']} W / {sensor['potencia_maxima']} W")
-    print("\n==============================================================================")
-    print("\n📈 Histórico (últimos 10 registros):")
-    for valor in historico[-10:]:
-        print(f"• {round(valor, 2)} W")
-    print("\n==============================================================================")
+
+    # Soma o consumo total da casa
+    consumo_total = sum(c["consumo"] for c in leituras)
+
+    # Atualiza a IA com o novo consumo
+    ia.atualizar(consumo_total)
+
+    # Executa análises inteligentes
+    previsao = ia.prever_consumo()
+    anomalia = ia.detectar_anomalia(consumo_total)
+    consumo_otimizado = ia.otimizar(consumo_total)
+
+    # Detecta pico de demanda
+    pico = previsao is not None and previsao > consumo_total * 1.25
+
+    # Obtém o histórico por cômodo
+    historico_comodos = obter_historico_comodos()
+
+    # Exibe o relatório no terminal
+    exibir(
+        consumo_total,
+        consumo_otimizado,
+        pico,
+        anomalia,
+        previsao,
+        historico_comodos
+    )
+
+    # Exibe consumo atual por cômodo
+    print("\n🚪 Consumo atual por cômodo:")
+    for c in leituras:
+        print(f"• {c['nome']}: {c['consumo']} W / {c['potencia_maxima']} W")
+
     time.sleep(2)
